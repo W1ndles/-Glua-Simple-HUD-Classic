@@ -9,6 +9,8 @@ local function HideDefaultHUD(name)
     if hidden[name] then return false end
 end
 
+local menuColor = nil
+
 surface.CreateFont("DermaDefault_Large", {
     font = "DermaDefault",
     size = 42,
@@ -124,5 +126,26 @@ local function changeColor()
         frame:Close()
     end
 end
+
+hook.Add("AddToolMenuCategories", "CustomCategory", function ()
+    spawnmenu.AddToolCategory("Utilities", "Stuff", "#Stuff")
+end)
+
+hook.Add("PopulateToolMenu", "CustomMenuSettings", function ()
+    spawnmenu.AddToolMenuOption("Utilities", "Stuff", "HUD Color", "#HUD Color", "", "", function (panel)
+        local mixer = vgui.Create("DColorMixer", panel)
+
+        mixer:SetPos(0, 20)
+
+        local button = vgui.Create("DButton", panel)
+
+        button:SetText("Save")
+        button:SetPos(100, 260)
+
+        button.DoClick = function ()
+            color_ac = mixer:GetColor()
+        end
+    end)
+end)
 
 concommand.Add("open_menu", changeColor)
